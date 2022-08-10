@@ -1,0 +1,22 @@
+.navbar{
+    width:15%;
+    background-color:#010305;
+   
+}
+.nav-bar{
+    display:flex;
+    flex-direction:column;
+}
+.nav-title{
+    font-size: 0.85em;
+    color:#808182;
+    padding:0 16px;
+}
+.nav-item{
+color:#fff;
+padding:4px 16px;
+display:flex;
+}
+.menu-icon{
+    padding:4px 8px;
+}

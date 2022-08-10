@@ -1,0 +1,8 @@
+.row{
+    display:flex;
+    justify-content:row;
+}
+.col{
+    display:flex;
+    justify-content:column !important;
+}

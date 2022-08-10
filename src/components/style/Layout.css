@@ -1,0 +1,15 @@
+.layout{
+}
+.header{
+    width:100%;
+    position:fixed;
+
+}
+.navbar{
+    
+}
+.content{
+    display:flex;
+    padding-top:64px;
+
+}
