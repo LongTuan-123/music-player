@@ -14,7 +14,8 @@ import MuteIcon from "../../assets/icon/MuteIcon";
 import NgoiSaoCoDon from "../../assets/music/NgoiSaoCoDon.mp3";
 import Music from "../../assets/music/top10ncs.mp3";
 import { AnimateKeyframes } from "react-simple-animate";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useContext, useMemo } from "react";
+import { indexContext } from "../home/index.js";
 
 const AudioPlayer = () => {
   const audioRef = useRef();
@@ -25,7 +26,10 @@ const AudioPlayer = () => {
   const [duration, setDuration] = useState(0.1);
   const [currentProcess, setCurrentProcess] = useState(0);
   const [musicData, setMusicData] = useState([]);
-  const [audioIndex, setAudioIndex] = useState(0);
+  // const [audioIndex, setAudioIndex] = useState();
+  const getIndex = useContext(indexContext);
+  const audioIndex = Number(useMemo(() => getIndex, [getIndex]))
+  console.log(audioIndex);
   const [isLike, setIsLike] = useState(false);
   useEffect(() => {
     axios
@@ -35,19 +39,20 @@ const AudioPlayer = () => {
       });
   }, []);
 
-  useEffect(()=>{
-    setTimeout(() => {
-      setCurrentTime(audioRef.current.currentTime);
-      setCurrentProcess((currentTime / duration) * 100);
+  useEffect(() => {
+    setInterval(() => {
+      setCurrentTime(audioRef.current?.currentTime);
+      setCurrentProcess(
+        (audioRef.current?.currentTime / audioRef.current?.duration) * 100,
+      );
     }, 1000);
- 
-  },[])
-
+  }, []);
+  // console.log(currentProcess);
 
   const handlePausePlayClick = () => {
     if (isPlaying) {
       audioRef.current.play();
-      setDuration(audioRef.current.duration);
+      setDuration(audioRef.current?.duration);
       setIsPlaying(!isPlaying);
     } else {
       audioRef.current.pause();
@@ -57,8 +62,7 @@ const AudioPlayer = () => {
   const handleProcess = (e) => {
     setCurrentProcess(e.target.value);
     audioRef.current.currentTime =
-      (currentProcess * audioRef.current.duration) / 100;
-
+      (e.target.value * audioRef.current?.duration) / 100;
   };
   const handleVolume = (e) => {
     audioRef.current.volume = e.target.value / 100;
@@ -68,30 +72,29 @@ const AudioPlayer = () => {
       setIsMute(true);
     }
   };
-  const handleNext = () => {
-    if (audioIndex < musicData.length) {
-      setAudioIndex(audioIndex + 1);
-    } else {
-      setAudioIndex(0);
-    }
-  };
-  const handlePrve = (e) => {
-    if (audioIndex === 0) {
-      setAudioIndex(musicData.length);
-    } else {
-      setAudioIndex(audioIndex - 1);
-    }
-  };
-  console.log(audioIndex);
+  // const handleNextSong = () => {
+  //   if (audioIndex < musicData.length) {
+  //     setAudioIndex(audioIndex + 1);
+  //   } else {
+  //     setAudioIndex(0);
+  //   }
+  // };
+  // const handlePrveSong = (e) => {
+  //   if (audioIndex === 0) {
+  //     setAudioIndex(musicData.length);
+  //   } else {
+  //     setAudioIndex(audioIndex - 1);
+  //   }
+  // };
 
   return (
     <div className="audioPlayer">
       <div className="music-player">
         <div className="music-control-left">
           <div className="icon-control">
-            <button onClick={handlePrve} className="backstep-btn">
+            {/* <button onClick={handlePrveSong} className="backstep-btn">
               <BackIcon />
-            </button>
+            </button> */}
           </div>
 
           <div className="icon-control">
@@ -101,9 +104,9 @@ const AudioPlayer = () => {
           </div>
 
           <div className="icon-control">
-            <button onClick={handleNext} className="nextstep-btn">
+            {/* <button onClick={handleNextSong} className="nextstep-btn">
               <NextIcon />
-            </button>
+            </button> */}
           </div>
           <div className="icon-control">
             <button className="reload-btn">
@@ -118,7 +121,7 @@ const AudioPlayer = () => {
         </div>
         <div className="music-range">
           <AnimateKeyframes
-            play
+            play={isPlaying}
             duration={5}
             keyframes={[
               "transform: rotateX(0) rotateY(0) rotateZ(0)",
@@ -128,36 +131,30 @@ const AudioPlayer = () => {
           >
             <div ref={cdThumbRef} className="music-cd">
               <img src={musicData[audioIndex]?.image} />
+              {/* {console.log(musicData[audioIndex]?.id)} */}
             </div>
           </AnimateKeyframes>
           <div className="song-info">
-            <marquee direction="right" className="song-name">
+            {!isPlaying?( <marquee direction="right" className="song-name">
               {musicData[audioIndex]?.name}
-            </marquee>
+            </marquee>):( <div direction="right" className="song-name">
+              {musicData[audioIndex]?.name}
+            </div>)}
+           
             <div className="singer-name">{musicData[audioIndex]?.singer}</div>
           </div>
 
           <input
             id="progress"
             className="progress"
-            onInput={handleProcess}
+            onChange={handleProcess}
             type="range"
             value={currentProcess}
             step="0.5"
             min="0"
             max="100"
           ></input>
-          <audio
-            id="audio"
-            ref={audioRef}
-            type="audio/mp3"
-            // src={Music}
-          >
-            <source
-              src="../../assets/music/NgoiSaoCoDon.mp3"
-              type="audio/mpeg"
-            />
-          </audio>
+          <audio id="audio" ref={audioRef} type="audio/mp3" src={Music}></audio>
           <div className="time-range">
             {`${Math.floor(currentTime / 60)}.${Math.floor(
               currentTime % 60,

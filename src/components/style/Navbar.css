@@ -6,6 +6,7 @@
 .nav-bar{
     display:flex;
     flex-direction:column;
+    padding:24px 0px;
 }
 .nav-title{
     font-size: 0.85em;

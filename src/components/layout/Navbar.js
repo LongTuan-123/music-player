@@ -1,13 +1,13 @@
 import "../style/Navbar.css";
 import { BsMusicPlayerFill } from "react-icons/bs";
 import { BsFillPersonBadgeFill } from "react-icons/bs";
-import { GrLineChart } from "react-icons/gr";
+import { AiOutlineBarChart } from "react-icons/ai";
 import { RiRadioFill } from "react-icons/ri";
 import { FaMusic } from "react-icons/fa";
-import {  } from "react-icons/gr";
-
-
-
+import { BsMusicNoteList } from "react-icons/bs";
+import { GiLoveSong } from "react-icons/gi";
+import { TbFileLike } from "react-icons/tb";
+// import { GiLoveSong } from "react-icons/gi";
 
 const Navbar = () => {
   const menuBrowser = [
@@ -25,11 +25,11 @@ const Navbar = () => {
     },
     {
       title: "Popular",
-      icon: <BsMusicPlayerFill />,
+      icon: <BsMusicNoteList />,
     },
     {
       title: "Charts",
-      icon: <GrLineChart />,
+      icon: <AiOutlineBarChart />,
     },
     {
       title: "Radio",
@@ -39,16 +39,17 @@ const Navbar = () => {
   const menuLibrary = [
     {
       title: "Likes",
+      icon: <TbFileLike  />,
     },
     {
       title: "Playlists",
+      icon: <BsMusicNoteList />,
     },
     {
       title: "Songs",
+      icon: <GiLoveSong />,
     },
-    {
-      title: "Discover",
-    },
+
   ];
   return (
     <div className="navbar">
@@ -67,9 +68,17 @@ const Navbar = () => {
         })}
       </div>
       <div className="nav-bar">
-        <div className="nav-title">Library</div>
+        <div className="nav-title">Library </div>
         {menuLibrary.map((library) => {
-          return <div className="nav-item">{library.title}</div>;
+          return (
+            <div className="nav-item">
+              <div className="menu-icon">
+                {library.icon}
+              </div>
+
+              {library.title}
+            </div>
+          )
         })}
       </div>
     </div>

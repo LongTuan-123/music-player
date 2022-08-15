@@ -96,7 +96,7 @@ padding:8 16px;
     font-size:0.6rem;
     padding:2px 8px;
     display:inline-block;
-    overflow: hidden;
+    overflow-x: hidden;
 }
 
   input[type="range"] {
